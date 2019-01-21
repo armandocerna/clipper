@@ -2,6 +2,7 @@ package clipper
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"time"
@@ -18,8 +19,31 @@ type Clip struct {
 
 var CurrentClipboard Clipboard
 
+var clipTemplate string = `
+<h1>Clipboard History</h1>
+<ul>
+    {{range $i, $a := .}}
+            <li>{{.Message}}---- {{minutesSince .Date}} Minutes Old</li>
+	{{end}}
+</ul>
+</ul>
+`
+
 func DashboardHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("This is where the clipboard goes"))
+	tmpl, err := template.New("").Funcs(template.FuncMap{
+		"minutesSince": func(t time.Time) string {
+			s := fmt.Sprintf("%f", time.Now().Sub(t).Minutes())
+			return s
+		},
+	}).Parse(clipTemplate)
+	if err != nil {
+		log.Fatalf("error parsing template: %v", err)
+	}
+
+	err = tmpl.Execute(w, CurrentClipboard)
+	if err != nil {
+		log.Fatalf("error templating clipboard history: %v", err)
+	}
 }
 
 func (c Clip) New(s string) *Clip {
