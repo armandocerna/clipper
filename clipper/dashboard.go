@@ -1,7 +1,6 @@
 package clipper
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -23,7 +22,7 @@ var clipTemplate string = `
 <h1>Clipboard History</h1>
 <ul>
     {{range $i, $a := .}}
-            <li>{{.Message}}---- {{minutesSince .Date}} Minutes Old</li>
+            <li>{{.Message}}	Age: {{minutesSince .Date}}</li>
 	{{end}}
 </ul>
 </ul>
@@ -32,8 +31,7 @@ var clipTemplate string = `
 func DashboardHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.New("").Funcs(template.FuncMap{
 		"minutesSince": func(t time.Time) string {
-			s := fmt.Sprintf("%f", time.Now().Sub(t).Minutes())
-			return s
+			return time.Since(t).String()
 		},
 	}).Parse(clipTemplate)
 	if err != nil {
@@ -52,7 +50,6 @@ func (c Clip) New(s string) *Clip {
 }
 
 func (cb *Clipboard) Append(c *Clip) {
-	fmt.Printf("Appending %s to %v", c, cb)
 	*cb = append(*cb, *c)
 }
 
@@ -65,14 +62,9 @@ func ReadClipboard() {
 			log.Fatalf("Error reading clipboard %v", err)
 		}
 		if current != lastCopy {
-			fmt.Printf("Current: %s Append: %s", current, lastCopy)
 			CurrentClipboard.Append(c.New(current))
 			lastCopy = current
 		}
-		fmt.Println("Current clipboard line")
-		fmt.Println(current)
-		fmt.Println("Clipboard History")
-		fmt.Println(CurrentClipboard)
 		time.Sleep(time.Second * 5)
 	}
 }
