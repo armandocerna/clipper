@@ -11,7 +11,7 @@ import (
 var endpoint, port string
 
 func init() {
-	flag.StringVar(&endpoint,"endpoint", "0.0.0.0", "The host to listen to defaults to 0.0.0.0")
+	flag.StringVar(&endpoint, "endpoint", "0.0.0.0", "The host to listen to defaults to 0.0.0.0")
 	flag.StringVar(&port, "port", "12345", "Port to listen on defaults to 12345")
 }
 

@@ -2,10 +2,11 @@ package clipper
 
 import (
 	"fmt"
-	"github.com/atotto/clipboard"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/atotto/clipboard"
 )
 
 type Clipboard []Clip
