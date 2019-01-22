@@ -19,6 +19,5 @@ func main() {
 	flag.Parse()
 	fmt.Printf("starting webserver on %s:%s\n", endpoint, port)
 	http.HandleFunc("/", clipper.DashboardHandler)
-	go clipper.ReadClipboard()
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", endpoint, port), nil))
 }
