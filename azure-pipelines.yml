@@ -27,7 +27,6 @@ steps:
   displayName: 'Set up the Go workspace'
 
 - script: |
-    GO111MODULE=on go version
-    GO111MODULE=on go build -v -o main .
+    docker build .
   workingDirectory: '$(modulePath)'
-  displayName: 'Get dependencies, then build'
+  displayName: 'Build the dockerfile'
