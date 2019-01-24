@@ -28,6 +28,6 @@ steps:
 
 - script: |
     GO111MODULE=on go version
-    GO111MODULE=on go build -v . -o main
+    GO111MODULE=on go build -v -o main .
   workingDirectory: '$(modulePath)'
   displayName: 'Get dependencies, then build'
